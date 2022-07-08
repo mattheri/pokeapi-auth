@@ -9,11 +9,22 @@ const pokeService = new PokeService();
 const Pokemons = () => {
   const [data, setData] = useState([]);
 
-  const getPokemons = async () => setData(await pokeService.getPokemons());
+  const getPokemons = async () => {
+    const pokemons = await pokeService.getPokemons();
+
+    setData(
+      await Promise.all(
+        pokemons.map((pokemon) =>
+          pokeService.getPokemonWithReturnedUrl(pokemon.url)
+        )
+      )
+    );
+  };
 
   useEffect(() => {
     getPokemons();
   }, []);
+
   return <PokeList pokemons={data} />;
 };
 

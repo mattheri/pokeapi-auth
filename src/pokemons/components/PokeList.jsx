@@ -6,11 +6,7 @@ const PokeList = ({ pokemons }) => {
   return (
     <Row>
       {pokemons.map((pokemon) => (
-        <PokeCard
-          key={pokemon.name}
-          pokeName={pokemon.name}
-          url={pokemon.url}
-        />
+        <PokeCard key={pokemon.id} pokemon={pokemon} />
       ))}
     </Row>
   );
