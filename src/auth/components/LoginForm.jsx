@@ -42,7 +42,7 @@ const LoginForm = () => {
   return (
     <Container fluid className="vh-100">
       <Container className="h-100 d-flex justify-content-center align-items-center">
-        <Form>
+        <Form onSubmit={onSubmit}>
           <Row>
             <Col>
               <Input id="email" onChange={onChange} value={formData.email} />
