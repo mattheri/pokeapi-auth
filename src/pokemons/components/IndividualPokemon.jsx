@@ -11,12 +11,12 @@ import { capitalize } from "../../utils";
 const pokeService = new PokeService();
 
 const IndividualPokemon = () => {
-  const [pokemon, setPokemon] = useState(null);
+  const [data, setData] = useState(null);
   const params = useParams();
 
   const getPokemonById = async () => {
     if (params.id) {
-      setPokemon(await pokeService.getPokemonById(params.id));
+      setData(await pokeService.getPokemonById(params.id));
     }
   };
 
@@ -24,20 +24,22 @@ const IndividualPokemon = () => {
     getPokemonById();
   }, [params]);
 
-  return (
-    pokemon && (
+  if (data) {
+    return (
       <>
         <ProfileHeader
-          profileImage={pokemon.sprites.other["official-artwork"].front_default}
-          alt={capitalize(pokemon.name)}
+          profileImage={data.sprites.other["official-artwork"].front_default}
+          alt={capitalize(data.name)}
           backTo={routes.home}
           backToName="Home"
-          name={capitalize(pokemon.name)}
+          name={capitalize(data.name)}
         />
-        <PokemonMoves moves={pokemon.moves} />
+        <PokemonMoves moves={data.moves} />
       </>
-    )
-  );
+    );
+  } else {
+    return null;
+  }
 };
 
 export default IndividualPokemon;
