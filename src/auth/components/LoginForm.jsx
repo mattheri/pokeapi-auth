@@ -4,6 +4,7 @@ import Input from "../../components/Input";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
+import Button from "react-bootstrap/Button";
 import useAuth from "../hooks/UseAuth";
 
 const REQUIRED_AUTHENTICATION = {
@@ -53,6 +54,9 @@ const LoginForm = () => {
                 value={formData.password}
                 type="password"
               />
+            </Col>
+            <Col>
+              <Button type="submit">Connexion</Button>
             </Col>
           </Row>
         </Form>
