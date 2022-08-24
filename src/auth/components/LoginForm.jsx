@@ -6,29 +6,35 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Button from "react-bootstrap/Button";
 import useAuth from "../hooks/UseAuth";
-import { Formik, Form } from "formik";
-import * as yup from "yup";
+import { Formik, Form, validateYupSchema } from "formik";
+import * as Yup from "yup";
+import { useDispatch } from "react-redux";
+import { updateWholeUser } from "../store/authSlice";
 
 const REQUIRED_AUTHENTICATION = {
   email: "mathieu.theriault@cegeptr.qc.ca",
-  password: "such-password",
+  password: "such-password1",
 };
 
 const initialValues = {
   email: "",
+  name: "",
   password: "",
 };
 
+const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[-_@\.A-Za-z\d]{8,}$/;
+
 const LoginForm = () => {
   const auth = useAuth();
+  const dispatch = useDispatch();
 
   const onSubmit = (values) => {
-    const formDataValuesMatchRequiredAuth = Object.entries(values).every(
-      ([key, value]) => REQUIRED_AUTHENTICATION[key] === value
-    );
-    if (formDataValuesMatchRequiredAuth) {
-      auth();
-    }
+    const formDataValuesMatchRequiredAuth = Object.entries({
+      email: values.email,
+      password: values.password,
+    }).every(([key, value]) => REQUIRED_AUTHENTICATION[key] === value);
+    dispatch(updateWholeUser({ name: values.name, email: values.email }));
+    auth();
   };
 
   return (
@@ -38,16 +44,15 @@ const LoginForm = () => {
           onSubmit={onSubmit}
           initialValues={initialValues}
           validateOnChange
-          validationSchema={yup.object({
-            email: yup
-              .string()
+          validationSchema={Yup.object({
+            email: Yup.string()
               .required("This field is required")
               .email("Enter a valid email"),
-            password: yup
-              .string()
+            name: Yup.string().required("This field is required"),
+            password: Yup.string()
               .required("The password is required")
               .matches(
-                /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
+                passwordRegex,
                 "Password must contain 8 characters, at least one letter and number"
               ),
           })}
@@ -55,8 +60,13 @@ const LoginForm = () => {
           <Form as={BsForm} noValidate>
             <Row>
               <Col>
-                <Input id="email" label="Email" required />
+                <Input id="email" label="Email" type="email" required />
               </Col>
+              <Col>
+                <Input id="name" label="Name" required />
+              </Col>
+            </Row>
+            <Row>
               <Col>
                 <Input
                   id="password"
