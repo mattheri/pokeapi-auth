@@ -5,16 +5,10 @@ import BsForm from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Button from "react-bootstrap/Button";
-import useAuth from "../hooks/UseAuth";
-import { Formik, Form, validateYupSchema } from "formik";
+import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { useDispatch } from "react-redux";
-import { updateWholeUser } from "../store/authSlice";
-
-const REQUIRED_AUTHENTICATION = {
-  email: "mathieu.theriault@cegeptr.qc.ca",
-  password: "such-password1",
-};
+import useEmailPasswordSignin from "../hooks/useEmailPasswordSignin";
+import useGoogleSignin from "../hooks/useGoogleSignin";
 
 const initialValues = {
   email: "",
@@ -25,16 +19,11 @@ const initialValues = {
 const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[-_@\.A-Za-z\d]{8,}$/;
 
 const LoginForm = () => {
-  const auth = useAuth();
-  const dispatch = useDispatch();
+  const signinWithEmailAndPassword = useEmailPasswordSignin();
+  const signinWithGoogle = useGoogleSignin();
 
   const onSubmit = (values) => {
-    const formDataValuesMatchRequiredAuth = Object.entries({
-      email: values.email,
-      password: values.password,
-    }).every(([key, value]) => REQUIRED_AUTHENTICATION[key] === value);
-    dispatch(updateWholeUser({ name: values.name, email: values.email }));
-    auth();
+    signinWithEmailAndPassword(values.email, values.password);
   };
 
   return (
@@ -86,6 +75,9 @@ const LoginForm = () => {
             </Row>
           </Form>
         </Formik>
+        <Button onClick={signinWithGoogle} type="button" variant="danger">
+          Connexion avec Google
+        </Button>
       </Container>
     </Container>
   );

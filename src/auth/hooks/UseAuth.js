@@ -1,12 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 
 const useAuth = () => {
-	const storage = localStorage;
-	const key = "user";
 	const navigate = useNavigate();
 
-	return () => {
-		storage.setItem(key, 1);
+	return async (email, password) => {
 		navigate('/pokemon');
 	}
 }

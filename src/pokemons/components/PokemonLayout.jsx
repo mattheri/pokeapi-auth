@@ -1,18 +1,10 @@
 import React, { useEffect } from "react";
 import { Button, Container, Nav, Navbar } from "react-bootstrap";
-import { Link, Outlet, useNavigate } from "react-router-dom";
-import useIsAuth from "../../auth/hooks/UseIsAuth";
+import { Link, Outlet } from "react-router-dom";
 import useSignout from "../../auth/hooks/UseSignout";
 
 const PokemonLayout = () => {
   const navbarId = "navbar";
-  const isAuth = useIsAuth();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!isAuth) navigate("/login");
-  }, [isAuth]);
-
   const disconnect = useSignout();
 
   return (
