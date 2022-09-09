@@ -4,7 +4,6 @@ import useFetchPokemons from "../hooks/useFetchPokemons";
 
 const Pokemons = () => {
   const data = useFetchPokemons();
-
   return <PokeList pokemons={data} />;
 };
 
